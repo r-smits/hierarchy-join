@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from pyspark.sql import DataFrame, SparkSession, Column
 from pyspark.sql.functions import col
-from configuration import TaskConfig
+from src.configuration import TaskConfig
 from typing import List, Union, Generator, Optional
 import datetime as dt
 from scheduler import Scheduler
-from logger import logger
+from src.logger import logger
 
 
 class IncompatibleFormatException(Exception):

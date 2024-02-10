@@ -1,9 +1,9 @@
-from job import Job, IncompatibleFormatException
+from src.job import Job, IncompatibleFormatException
 from typing import List, Generator, Union
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, date_trunc
-from logger import logger
-from configuration import Property, DataFrameConfig
+from src.logger import logger
+from src.configuration import Property, DataFrameConfig
 from datetime import datetime
 
 

@@ -1,14 +1,13 @@
 from pathlib import Path
-from job import Job
-from job.hierarchy_join import HierarchyJoin
-from job.user_retrieve import UserRetrieve
-from job.validate import Validate
+from src.job import Job
+from src.job.hierarchy_join import HierarchyJoin
+from src.job.user_retrieve import UserRetrieve
+from src.job.validate import Validate
 from pyspark import SparkConf
-from configuration import AppConfiguration
+from src.configuration import AppConfiguration, TaskConfig
 import yaml
 from pyspark.sql import SparkSession
-from logger import logger
-from configuration import TaskConfig
+from src.logger import logger
 from typing import List
 from scheduler import Scheduler
 import time
@@ -25,7 +24,10 @@ def init_app_conf(path: Path) -> AppConfiguration:
     """
     logger.info(f"Loading app configuration from: {path}")
     yaml_dict: dict = yaml.safe_load(path.absolute().read_bytes())
+    logger.info(yaml_dict)
     app_configuration: AppConfiguration = AppConfiguration.from_dict(yaml_dict)
+
+    exit()
     return app_configuration
 
 
@@ -34,7 +36,7 @@ def init_spark_conf(conf: AppConfiguration) -> SparkConf:
     Retrieve spark conf from application conf
     """
     spark_conf: SparkConf = SparkConf()
-    spark_conf.setAll([property.to_tuple() for property in app_configuration.spark_config])
+    spark_conf = spark_conf.setAll([property.to_tuple() for property in app_configuration.spark_config])
     return spark_conf
 
 

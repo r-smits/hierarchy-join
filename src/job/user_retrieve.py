@@ -1,8 +1,8 @@
-from job import Job, IncompatibleFormatException
+from src.job import Job, IncompatibleFormatException
 from typing import List, Generator, Union
 from pyspark.sql import DataFrame, Column
 from pyspark.sql.functions import col
-from logger import logger
+from src.logger import logger
 
 
 class UserRetrieve(Job):

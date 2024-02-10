@@ -25,13 +25,9 @@ We update only the partitions to which additional data has come in or overwrite 
 Hierarchy data: (PK, FK, LOCATION)
 Adjacency list describing a tree of locations. Unwraps into muliple tables.
 Emulates primary keys (PK) referencing foreign keys (FK) in an imaginary relational database.
-          *
-    -------------
-    1           2
-  / | \         |
-3   4   5       6
-                |
-                7
+
+[picture here]
+
 This enforces the excercise constraint in which a direct join does not yield all results.
 
 Tree Assumptions:
