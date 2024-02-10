@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+dataclasses-json = "0.6.2"
+pyyaml = "6.0.1"
+pyspark = "3.5.0"
+scheduler = "0.8.5"
+
+[dev-packages]
+pytest = "7.4.0"
+
+[requires]
+python_version = "3.9"
+
+[scripts]
+start = "pipenv run python src/main.py"

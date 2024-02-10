@@ -1,0 +1,143 @@
+spark_config:
+  - key: spark.app.name
+    value: pipeline
+  - key: spark.sql.sources.partitionOverwriteMode
+    value: dynamic
+
+task_config:
+  - name: validate
+    from_date: '2010-01-01'
+    to_date: '2024-02-10'
+    scheduler: true
+    frequency: hourly
+    partition: PARTITION_TIME
+    target_format: parquet
+    dataframe_config:
+      - name: linear
+        format: csv
+        type: linear
+        location: data/0_db/linear
+        schema: 
+          - key: PK
+            value: INTEGER NOT NULL
+          - key: NOTIONAL
+            value: FLOAT
+          - key: EVENT_TIME
+            value: TIMESTAMP NOT NULL
+      - name: hierarchy
+        format: csv
+        type: hierarchy
+        location: data/0_db/hierarchy
+        schema:
+          - key: PK
+            value: INTEGER NOT NULL
+          - key: FK
+            value: INTEGER
+          - key: LOCATION
+            value: STRING
+    save_location: data/1_validated/
+  - name: hierarchy_join
+    from_date: '2010-01-01'
+    to_date: '2024-02-10'
+    scheduler: true
+    frequency: hourly
+    partition: PARTITION_TIME
+    target_format: parquet
+    dataframe_config:
+      - name: ds1
+        format: parquet
+        type: linear
+        location: data/1_validated/linear
+        schema: 
+          - key: PK
+            value: INTEGER NOT NULL
+          - key: NOTIONAL
+            value: FLOAT
+          - key: EVENT_TIME
+            value: TIMESTAMP NOT NULL
+          - key: PARTITION_TIME
+            value: TIMESTAMP NOT NULL
+      - name: ds2
+        format: parquet
+        type: hierarchy
+        location: data/1_validated/hierarchy
+        schema:
+          - key: PK
+            value: INTEGER NOT NULL
+          - key: FK
+            value: INTEGER
+          - key: LOCATION
+            value: STRING
+    save_location: data/2_staging/dataset
+  - name: user_retrieve
+    from_date: '2010-01-07'
+    to_date: '2010-01-08'
+    scheduler: false
+    frequency: ''
+    partition: PARTITION_TIME
+    target_format: parquet
+    dataframe_config:
+      - name: ds1
+        format: parquet
+        type: linear
+        location: data/2_staging/dataset
+        schema: 
+          - key: PK
+            value: INTEGER NOT NULL
+          - key: NOTIONAL
+            value: FLOAT
+          - key: EVENT_TIME
+            value: TIMESTAMP NOT NULL
+          - key: PARTITION_TIME 
+            value: TIMESTAMP NOT NULL
+          - key: LOCATION
+            value: STRING
+    save_location: data/3_user/0/
+  - name: user_retrieve
+    from_date: '2010-03-10'
+    to_date: '2010-03-11'
+    scheduler: false
+    frequency: ''
+    partition: PARTITION_TIME
+    target_format: parquet
+    dataframe_config:
+      - name: ds1
+        format: parquet
+        type: linear
+        location: data/2_staging/dataset
+        schema: 
+          - key: PK
+            value: INTEGER NOT NULL
+          - key: NOTIONAL
+            value: FLOAT
+          - key: EVENT_TIME
+            value: TIMESTAMP NOT NULL
+          - key: PARTITION_TIME 
+            value: TIMESTAMP NOT NULL
+          - key: LOCATION
+            value: STRING
+    save_location: data/3_user/1/
+  - name: user_retrieve
+    from_date: '2010-01-01'
+    to_date: '2024-02-10'
+    scheduler: false
+    frequency: ''
+    partition: PARTITION_TIME
+    target_format: parquet
+    dataframe_config:
+      - name: ds1
+        format: parquet
+        type: linear
+        location: data/2_staging/dataset
+        schema: 
+          - key: PK
+            value: INTEGER
+          - key: NOTIONAL
+            value: FLOAT
+          - key: EVENT_TIME
+            value: TIMESTAMP
+          - key: PARTITION_TIME
+            value: TIMESTAMP
+          - key: LOCATION
+            value: STRING
+    save_location: data/3_user/2/
