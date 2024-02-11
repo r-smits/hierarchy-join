@@ -24,10 +24,7 @@ def init_app_conf(path: Path) -> AppConfiguration:
     """
     logger.info(f"Loading app configuration from: {path}")
     yaml_dict: dict = yaml.safe_load(path.absolute().read_bytes())
-    logger.info(yaml_dict)
     app_configuration: AppConfiguration = AppConfiguration.from_dict(yaml_dict)
-
-    exit()
     return app_configuration
 
 
